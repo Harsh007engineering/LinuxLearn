@@ -34,6 +34,11 @@ app.use(express.json({ limit: '10kb' }));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use('/api', limiter);
 
+// Add a simple route for the root URL so it stops throwing 404 errors in Vercel
+app.get('/', (req, res) => {
+  res.send('LinuxLearn API is running successfully!');
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/lessons', lessonRoutes);
@@ -63,19 +68,24 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect to MongoDB and start server
+// Connect to MongoDB
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB Atlas');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
   })
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err.message);
     process.exit(1);
   });
 
+// ONLY listen if we are NOT on Vercel (production)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+}
+
+// Export the app for Vercel
 module.exports = app;
