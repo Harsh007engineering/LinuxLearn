@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-terminal-bg text-terminal-text font-sans;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-terminal-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-terminal-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-terminal-muted;
+  }
+
+  ::selection {
+    @apply bg-terminal-green/30;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-terminal-green text-terminal-bg font-semibold px-5 py-2.5 rounded-lg 
+           hover:bg-terminal-green/90 active:scale-95 transition-all duration-200 
+           focus:outline-none focus:ring-2 focus:ring-terminal-green/50 text-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-terminal-surface text-terminal-text font-medium px-5 py-2.5 rounded-lg 
+           border border-terminal-border hover:border-terminal-green/50 hover:bg-terminal-border/50
+           active:scale-95 transition-all duration-200 focus:outline-none text-sm;
+  }
+
+  .btn-ghost {
+    @apply text-terminal-muted font-medium px-4 py-2 rounded-lg 
+           hover:text-terminal-text hover:bg-terminal-border/30
+           active:scale-95 transition-all duration-200 text-sm;
+  }
+
+  .card {
+    @apply bg-terminal-surface border border-terminal-border rounded-xl p-6 
+           transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:border-terminal-green/40 hover:shadow-lg hover:shadow-terminal-green/5;
+  }
+
+  .input-field {
+    @apply w-full bg-terminal-bg border border-terminal-border rounded-lg px-4 py-3 
+           text-terminal-text placeholder-terminal-muted font-mono text-sm
+           focus:outline-none focus:border-terminal-green/60 focus:ring-1 focus:ring-terminal-green/30
+           transition-all duration-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .xp-bar {
+    @apply h-2 rounded-full bg-terminal-border overflow-hidden;
+  }
+
+  .xp-fill {
+    @apply h-full bg-gradient-to-r from-terminal-green to-terminal-cyan rounded-full 
+           transition-all duration-700 ease-out;
+  }
+}
+
+/* Terminal-specific styles */
+.terminal-output {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.terminal-line-enter {
+  animation: slideUp 0.15s ease-out;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #3fb950, #79c0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
