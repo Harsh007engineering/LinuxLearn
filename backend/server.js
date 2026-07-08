@@ -24,12 +24,25 @@ const limiter = rateLimit({
 });
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173',              // local development
+  'https://linuxlearn.vercel.app',      // original frontend (keep if still in use)
+  'https://linux-learn-xi.vercel.app',  // current live frontend
+  process.env.FRONTEND_URL              // env-configured frontend (if set)
+].filter(Boolean); // removes undefined/empty entries
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://linuxlearn.vercel.app', process.env.FRONTEND_URL]
-    : 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // allow requests with no origin (curl, Postman, server-to-server, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true
 }));
+
 app.use(express.json({ limit: '10kb' }));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use('/api', limiter);
